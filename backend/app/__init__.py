@@ -1,0 +1,2 @@
+"""TalentMatch backend application."""
+
