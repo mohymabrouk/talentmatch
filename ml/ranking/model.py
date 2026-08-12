@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from math import isfinite
 from pathlib import Path
 
 import numpy as np
@@ -27,5 +28,7 @@ class RankerModel:
     def predict(self, vector: FeatureVector) -> float:
         if vector.schema_version != FEATURE_SCHEMA.version or vector.names != FEATURE_SCHEMA.names:
             raise ValueError("feature vector is incompatible with ranker")
-        return float(self.booster.predict(np.asarray([vector.values], dtype=np.float32))[0])
-
+        score = float(self.booster.predict(np.asarray([vector.values], dtype=np.float32))[0])
+        if not isfinite(score):
+            raise ValueError("ranker returned a non-finite score")
+        return score
