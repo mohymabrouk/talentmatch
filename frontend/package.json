@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "tsc --noEmit"
   },
   "dependencies": {
     "next": "15.4.6",
@@ -20,4 +20,3 @@
     "typescript": "^5.7.0"
   }
 }
-
