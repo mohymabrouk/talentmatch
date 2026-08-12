@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes import health, jobs, profile
+from app.api.routes import health, jobs, profile, recommendations
 from app.config import Settings, get_settings
 from app.db.session import build_session_factory
 
@@ -23,6 +23,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(health.router, prefix=app_settings.api_prefix)
     app.include_router(profile.router, prefix=app_settings.api_prefix)
     app.include_router(jobs.router, prefix=app_settings.api_prefix)
+    app.include_router(recommendations.router, prefix=app_settings.api_prefix)
     return app
 
 
