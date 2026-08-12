@@ -120,7 +120,7 @@ and content-ranking fallback.
 
 ---
 
-# Phase 5 — Evaluation suite
+# Phase 5 — Evaluation suite ✅
 
 Deliver:
 
@@ -142,9 +142,14 @@ metrics are persisted
 README reports real results
 ```
 
+Implemented by `scripts/evaluate.py` and `ml/evaluation/suite.py`. The command
+persists `evaluation-v001` JSON containing Recall@5/10/20, NDCG@5/10/20, MRR,
+coverage, diversity, p50/p95/p99 latency, cold-start/engaged/remote segments,
+fallback rate, and ranker baseline comparisons.
+
 ---
 
-# Phase 6 — UX polish
+# Phase 6 — UX polish ✅
 
 Deliver:
 
@@ -168,6 +173,11 @@ desktop and mobile usable
 no broken states
 no placeholder design
 ```
+
+Implemented as a responsive Next.js workspace with profile setup/editing,
+discovery search and work-mode filters, recommendation cards, detail drawer,
+save/dismiss/apply actions, saved/application views, loading skeletons, empty
+states, inline errors, mobile layout, semantic labels, and visible keyboard focus.
 
 ---
 

@@ -1,6 +1,6 @@
 # Implementation Checklist
 
-## Completed through Phase 4
+## Completed through Phase 6
 
 - [x] Create monorepo
 - [x] Add frontend
@@ -60,6 +60,21 @@
 - [x] Content-ranking fallback
 - [x] Model version persisted per recommendation request
 - [x] Ranker training and serving tests
+- [x] Complete offline evaluation command
+- [x] Recall@5, Recall@10, Recall@20
+- [x] NDCG@5, NDCG@10, NDCG@20, MRR
+- [x] Coverage and diversity metrics
+- [x] Latency p50, p95, p99
+- [x] Cold-start, engaged-user, and remote segments
+- [x] Fallback and empty-result reliability metrics
+- [x] Persisted evaluation report
+- [x] Responsive application shell
+- [x] Profile onboarding/editor
+- [x] Recommendation feed and filters
+- [x] Job detail view
+- [x] Saved jobs and application tracking views
+- [x] Loading, empty, and error states
+- [x] Keyboard focus and semantic accessibility pass
 
 The detailed backlog below is retained for future phases; the completed status above is authoritative.
 
@@ -169,47 +184,47 @@ The detailed backlog below is retained for future phases; the completed status a
 
 ## Frontend
 
-- [ ] App shell
-- [ ] Header
+- [x] App shell
+- [x] Header
 - [ ] Login
-- [ ] Onboarding
-- [ ] Role selector
-- [ ] Skill selector
-- [ ] Preference form
-- [ ] Recommendation feed
-- [ ] Job card
-- [ ] Match score
-- [ ] Match reasons
-- [ ] Filters
-- [ ] Job detail
-- [ ] Save
-- [ ] Dismiss
-- [ ] Apply
-- [ ] Saved page
-- [ ] Applications page
-- [ ] Profile page
-- [ ] Empty states
-- [ ] Skeleton states
-- [ ] Error states
-- [ ] Mobile layout
-- [ ] Keyboard navigation
-- [ ] Focus states
+- [x] Onboarding
+- [x] Role selector
+- [x] Skill selector
+- [x] Preference form
+- [x] Recommendation feed
+- [x] Job card
+- [x] Match score
+- [x] Match reasons
+- [x] Filters
+- [x] Job detail
+- [x] Save
+- [x] Dismiss
+- [x] Apply
+- [x] Saved page
+- [x] Applications page
+- [x] Profile page
+- [x] Empty states
+- [x] Skeleton states
+- [x] Error states
+- [x] Mobile layout
+- [x] Keyboard navigation
+- [x] Focus states
 
 ## Evaluation
 
-- [ ] Recall@5
-- [ ] Recall@10
-- [ ] Recall@20
-- [ ] NDCG@10
-- [ ] NDCG@20
-- [ ] MRR
-- [ ] Coverage
-- [ ] Diversity
-- [ ] Cold-start segment
-- [ ] Active-user segment
-- [ ] Latency p50
-- [ ] Latency p95
-- [ ] Fallback rate
+- [x] Recall@5
+- [x] Recall@10
+- [x] Recall@20
+- [x] NDCG@10
+- [x] NDCG@20
+- [x] MRR
+- [x] Coverage
+- [x] Diversity
+- [x] Cold-start segment
+- [x] Active-user segment
+- [x] Latency p50
+- [x] Latency p95
+- [x] Fallback rate
 
 ## Security
 

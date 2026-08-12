@@ -19,7 +19,7 @@ from sqlalchemy import select  # noqa: E402
 
 from app.core.config import Settings  # noqa: E402
 from app.db.session import build_session_factory  # noqa: E402
-from app.models import Job  # noqa: E402
+from app.models import Job, RecommendationRequest  # noqa: E402
 from ml.evaluation.suite import JobMetadata, evaluate_ranker, ranked_list_metrics  # noqa: E402
 from ml.features.dataset import FeatureDatasetBuilder  # noqa: E402
 from ml.ranking.dataset import chronological_split, load_rows  # noqa: E402
@@ -177,6 +177,14 @@ def main() -> None:
             report["ranking"] = {"status": "unavailable", "reason": "training rows or ranker artifact missing"}
 
         report["database"] = {"active_jobs": len(jobs), "ranking_rows": len(rows)}
+        requests = db.scalars(select(RecommendationRequest)).all()
+        fallback_count = sum(request.fallback_used for request in requests)
+        report["reliability"] = {
+            "recommendation_requests": len(requests),
+            "fallback_requests": fallback_count,
+            "fallback_rate": round(fallback_count / len(requests), 6) if requests else 0.0,
+            "empty_result_requests": sum(request.returned_count == 0 for request in requests),
+        }
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
         print(json.dumps(report, indent=2, sort_keys=True))

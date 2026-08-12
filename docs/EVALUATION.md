@@ -93,22 +93,22 @@ Never train and test on the same future event.
 
 # Baseline table
 
-README should eventually include real measured values.
-
-Example format only:
+The deterministic local fixture produces the following measured Phase 5 report.
+These values are demo-data measurements, not production claims.
 
 ```text
 Model                    Recall@20   NDCG@20   MRR
 ---------------------------------------------------
-Newest                    TBD         TBD       TBD
-Popularity                TBD         TBD       TBD
-Skill overlap             TBD         TBD       TBD
-Embedding retrieval       TBD         TBD       TBD
-LightGBM ranker            TBD         TBD       TBD
-Two-tower + ranker         TBD         TBD       TBD
+Newest                    1.000       0.834      0.778
+Popularity                1.000       1.000      1.000
+Skill overlap             1.000       0.754      0.667
+Embedding retrieval       1.000       0.844      1.000
+LightGBM ranker            1.000       1.000      1.000
+Two-tower + ranker        not run     not run    not run
 ```
 
-Do not invent metrics.
+Run `.venv/bin/python scripts/evaluate.py` to regenerate the persisted report.
+Do not treat the deterministic fixture as a production benchmark.
 
 ---
 
@@ -284,6 +284,10 @@ empty-result rate
 index-load failures
 ranker-load failures
 ```
+
+The complete report persists `fallback_rate` and `empty_result_requests` from
+recommendation request records, alongside retrieval/ranking latency p50, p95,
+and p99.
 
 ---
 

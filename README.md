@@ -16,7 +16,7 @@ Build a two-stage recommendation system that matches candidates to jobs using:
 
 The project is designed to demonstrate practical ML engineering rather than notebook-only modeling.
 
-## Implemented through Phase 4
+## Implemented through Phase 6
 
 The current implementation includes:
 
@@ -35,6 +35,8 @@ The current implementation includes:
 - LightGBM LambdaRank training with retrieval, skill, popularity, and freshness baselines
 - Versioned ranker artifacts containing the model, feature schema, metrics, config, and metadata
 - Ranker inference with schema validation, model-version persistence, and content-score fallback
+- One-command offline evaluation with quality, coverage, diversity, latency, segment, and reliability metrics
+- Responsive frontend workspace with profile editing, discovery filters, job details, saved roles, applications, and robust UI states
 
 The demo identity is intentionally local-only. Authentication and authorization via an external provider remain future work.
 
@@ -76,11 +78,18 @@ For a deterministic local training run after `seed_jobs.py`, use:
 .venv/bin/python scripts/seed_demo_feedback.py
 .venv/bin/python scripts/build_features.py
 .venv/bin/python scripts/train_ranker.py
+.venv/bin/python scripts/evaluate.py
 ```
 
 The default artifact directory is `ml/artifacts/ranker/v001/` and is intentionally
 ignored by Git. The API loads it when all compatibility files are present; otherwise
 it serves the Phase 3 content score and records `fallback_used=true`.
+
+`scripts/evaluate.py` writes `ml/artifacts/evaluation/v001/report.json`. The report
+contains retrieval and ranker Recall/NDCG/MRR at K, coverage, company/title
+diversity, prediction and retrieval latency percentiles, user segments, fallback
+rate, and baseline comparisons. The checked-in demo benchmark is documented in
+`docs/EVALUATION.md`; its values are deterministic fixture measurements.
 
 Validation commands:
 
