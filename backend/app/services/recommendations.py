@@ -38,7 +38,12 @@ class RecommendationService:
         self.fallback_used = True
         if (artifact_dir / "metadata.json").exists():
             try:
-                self.index = VectorIndex.load(artifact_dir)
+                loaded_index = VectorIndex.load(artifact_dir)
+                if loaded_index.embeddings.shape[1] != self.embedder.dimension:
+                    raise ValueError(
+                        "retrieval artifact dimension does not match the active embedding backend"
+                    )
+                self.index = loaded_index
                 self.fallback_used = False
             except Exception:
                 self.index = self._build_fallback_index()

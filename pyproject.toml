@@ -32,10 +32,21 @@ pythonpath = ["backend", "."]
 testpaths = ["backend/tests"]
 
 [tool.setuptools]
-package-dir = {"" = "backend"}
+packages = [
+  "app",
+  "app.api",
+  "app.api.routes",
+  "app.db",
+  "app.schemas",
+  "app.services",
+  "ml",
+  "ml.evaluation",
+  "ml.retrieval",
+]
 
-[tool.setuptools.packages.find]
-where = ["backend"]
+[tool.setuptools.package-dir]
+"" = "backend"
+"ml" = "ml"
 
 [tool.ruff]
 line-length = 100
