@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field
 
 
 class RecommendationItemResponse(BaseModel):
+    position: int
     job_id: str
     title: str
     company: str

@@ -19,5 +19,6 @@ button { background: var(--text); color: #fff; border: 0; border-radius: 6px; pa
 .job { border: 1px solid var(--border); border-radius: 8px; padding: 20px; background: var(--surface); }
 .job-meta { color: var(--muted); font-size: 14px; margin: 4px 0 12px; }
 .status { color: var(--muted); font-size: 14px; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.actions button { font-size: 13px; padding: 8px 12px; }
 @media (max-width: 640px) { .content { padding: 40px 16px; } .nav { padding: 0 16px; } }
-

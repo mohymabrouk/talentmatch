@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.api.deps import get_db, get_user_id
 from app.api.routes.profile import ensure_user
-from app.db.models import ModelVersion, RecommendationItem, RecommendationRequest
+from app.db.models import Interaction, ModelVersion, RecommendationItem, RecommendationRequest
 from app.schemas.recommendations import RecommendationItemResponse, RecommendationResponse
 from app.services.recommendations import RecommendationService
 
@@ -58,6 +58,15 @@ def get_recommendations(
                 ranking_score=item.score,
             )
         )
+        db.add(
+            Interaction(
+                user_id=user_id,
+                job_id=item.job.id,
+                event_type="impression",
+                recommendation_request_id=recommendation_request.id,
+                model_version=settings.model_version,
+            )
+        )
     db.commit()
     return RecommendationResponse(
         recommendation_request_id=recommendation_request.id,
@@ -65,6 +74,7 @@ def get_recommendations(
         retrieval_version=settings.retrieval_version,
         items=[
             RecommendationItemResponse(
+                position=position,
                 job_id=item.job.id,
                 title=item.job.title,
                 company=item.job.company_name,
@@ -73,6 +83,6 @@ def get_recommendations(
                 score=round(item.score, 6),
                 match_reasons=item.reasons,
             )
-            for item in scored
+            for position, item in enumerate(scored, start=1)
         ],
     )
