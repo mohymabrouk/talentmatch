@@ -93,7 +93,7 @@ unit tests cover critical features
 
 ---
 
-# Phase 4 — LightGBM ranker
+# Phase 4 — LightGBM ranker ✅
 
 Deliver:
 
@@ -112,6 +112,11 @@ ranker beats baseline on selected metric
 model version is stored with recommendations
 fallback exists
 ```
+
+Implemented in the current branch: `scripts/seed_demo_feedback.py`,
+`scripts/build_features.py`, `scripts/train_ranker.py`, chronological grouped
+evaluation, versioned artifacts, serving integration, model-version persistence,
+and content-ranking fallback.
 
 ---
 

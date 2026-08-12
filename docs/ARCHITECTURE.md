@@ -77,7 +77,7 @@ Load job features
         ↓
 Build candidate-job features
         ↓
-LightGBM predict
+LightGBM predict (or content-score fallback)
         ↓
 Apply business filters
         ↓
@@ -186,6 +186,11 @@ persist artifact
     ↓
 register model metadata
 ```
+
+Phase 4 uses `ml/ranking` for grouped chronological splits, LambdaRank training,
+baseline comparison, and artifact loading. The API records the loaded model version
+on each recommendation request and falls back to the content score when the ranker
+artifact is unavailable or incompatible.
 
 ---
 

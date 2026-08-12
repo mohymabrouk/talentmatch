@@ -1,6 +1,6 @@
 # Implementation Checklist
 
-## Completed through Phase 3
+## Completed through Phase 4
 
 - [x] Create monorepo
 - [x] Add frontend
@@ -49,8 +49,19 @@
 - [x] Shared training/serving feature builder
 - [x] Feature dataset exporter
 - [x] Critical feature unit tests
+- [x] Labeled feedback dataset definition
+- [x] Deterministic demo feedback seeder
+- [x] Chronological grouped train/validation/test split
+- [x] Retrieval, skill, popularity, and freshness baselines
+- [x] LightGBM LambdaRank trainer
+- [x] Versioned ranker artifact and metadata
+- [x] Ranker schema compatibility checks
+- [x] Ranker inference integration
+- [x] Content-ranking fallback
+- [x] Model version persisted per recommendation request
+- [x] Ranker training and serving tests
 
-The unchecked items below belong to later roadmap phases or production authentication/deployment work.
+The detailed backlog below is retained for future phases; the completed status above is authoritative.
 
 ## Repository
 
