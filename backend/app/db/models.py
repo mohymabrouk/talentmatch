@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 from uuid import uuid4
 
@@ -11,7 +11,7 @@ def new_id() -> str:
 
 
 def utcnow() -> datetime:
-    return datetime.utcnow()
+    return datetime.now(UTC).replace(tzinfo=None)
 
 
 class Base(DeclarativeBase):
@@ -153,4 +153,3 @@ class ModelVersion(Base):
 
 def model_to_dict(model: Any) -> dict[str, Any]:
     return {column.name: getattr(model, column.name) for column in model.__table__.columns}
-

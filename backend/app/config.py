@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     demo_user_email: str = "demo@talentmatch.local"
     api_prefix: str = "/api/v1"
     environment: str = "development"
+    cors_origin: str = "http://localhost:3000"
     retrieval_version: str = "retrieval-v001"
     model_version: str = "content-v001"
     retrieval_artifact_dir: str = "ml/artifacts/retrieval/v001"
@@ -21,4 +22,3 @@ class Settings(BaseSettings):
 @lru_cache
 def get_settings() -> Settings:
     return Settings()
-

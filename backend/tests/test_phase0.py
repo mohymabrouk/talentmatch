@@ -38,4 +38,9 @@ def test_jobs_filters_and_404(tmp_path: Path):
     client = TestClient(build_test_app(tmp_path))
     assert client.get("/api/v1/jobs").status_code == 200
     assert client.get("/api/v1/jobs/missing").status_code == 404
-
+    assert client.get("/api/v1/profile", headers={"X-Demo-User-ID": "not-a-uuid"}).status_code == 400
+    cors = client.options(
+        "/api/v1/jobs",
+        headers={"Origin": "http://localhost:3000", "Access-Control-Request-Method": "GET"},
+    )
+    assert cors.headers["access-control-allow-origin"] == "http://localhost:3000"

@@ -1,7 +1,7 @@
 from collections.abc import Generator
 from uuid import UUID
 
-from fastapi import Header, Request
+from fastapi import Header, HTTPException, Request
 from sqlalchemy.orm import Session
 
 
@@ -18,5 +18,4 @@ def get_user_id(request: Request, x_demo_user_id: str | None = Header(default=No
     try:
         return str(UUID(candidate))
     except ValueError as exc:
-        raise ValueError("X-Demo-User-ID must be a valid UUID") from exc
-
+        raise HTTPException(status_code=400, detail="X-Demo-User-ID must be a valid UUID") from exc
