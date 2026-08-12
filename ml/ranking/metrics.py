@@ -47,4 +47,3 @@ def baseline_scores(rows: list[RankingRow] | tuple[RankingRow, ...], feature_nam
     except (IndexError, ValueError) as exc:
         raise ValueError(f"unknown baseline feature: {feature_name}") from exc
     return [row.features.values[index] for row in rows]
-

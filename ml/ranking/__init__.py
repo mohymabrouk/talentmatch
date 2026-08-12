@@ -2,5 +2,5 @@
 
 from ml.ranking.model import RankerModel
 
-__all__ = ["RankerModel"]
 
+__all__ = ["RankerModel"]
