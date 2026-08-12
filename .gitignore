@@ -11,5 +11,6 @@ talentmatch.db
 .env
 frontend/node_modules/
 frontend/.next/
+frontend/tsconfig.tsbuildinfo
 ml/artifacts/*
 !ml/artifacts/.gitkeep
