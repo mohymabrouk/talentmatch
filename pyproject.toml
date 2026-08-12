@@ -29,7 +29,7 @@ retrieval = [
 
 [tool.pytest.ini_options]
 pythonpath = ["backend", "."]
-testpaths = ["backend/tests"]
+testpaths = ["backend/tests", "ml/tests"]
 
 [tool.setuptools]
 packages = [
@@ -44,6 +44,7 @@ packages = [
   "app.services",
   "ml",
   "ml.evaluation",
+  "ml.features",
   "ml.retrieval",
 ]
 
