@@ -313,6 +313,38 @@ Features must only use information available at `served_at`.
 
 No future leakage.
 
+## Implemented Phase 4 training path
+
+The canonical exporter is `scripts/build_features.py`. It emits one row per served
+recommendation item, with `save` or `apply` as the positive label and an impression
+without either event as negative. Timestamps are serialized with an explicit UTC
+offset so the loader rejects ambiguous records.
+
+`ml/ranking/dataset.py` groups rows by recommendation request before splitting:
+
+```text
+oldest request groups   70% train
+next request groups     15% validation
+newest request groups   15% test
+```
+
+No recommendation request is split across datasets. `scripts/train_ranker.py` trains
+LightGBM LambdaRank and writes this versioned artifact contract:
+
+```text
+ml/artifacts/ranker/v001/
+├── model.txt
+├── feature_schema.json
+├── metrics.json
+├── training_config.json
+└── metadata.json
+```
+
+The artifact records the feature schema version and ordered feature names. Serving
+loads only compatible artifacts and falls back to the content score if files are
+missing, incompatible, or produce a non-finite prediction. The selected offline
+comparison metric is NDCG@20 against the retrieval-score baseline.
+
 ---
 
 # Time-based split

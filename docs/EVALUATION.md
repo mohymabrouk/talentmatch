@@ -147,6 +147,21 @@ MRR
 Precision@K
 ```
 
+Phase 4 currently evaluates grouped recommendation requests with a chronological
+70/15/15 split. The trainer reports NDCG@20 and MRR for the LambdaRank model and
+these deterministic baselines:
+
+```text
+retrieval score
+skill overlap ratio
+job popularity
+newest job (negative age)
+```
+
+Promotion requires the ranker to beat the selected retrieval baseline on NDCG@20.
+Metrics, training configuration, feature schema, and model metadata are persisted
+alongside the LightGBM artifact.
+
 ---
 
 # Segment evaluation

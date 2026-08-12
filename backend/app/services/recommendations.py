@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -12,6 +12,7 @@ from ml.features.store import FeatureStore
 from ml.retrieval.embeddings import build_embedder
 from ml.retrieval.index import VectorIndex
 from ml.retrieval.text import candidate_text, job_text
+from app.services.ranker import RankerProvider
 
 
 @dataclass(frozen=True)
@@ -20,6 +21,7 @@ class ScoredJob:
     score: float
     retrieval_score: float
     reasons: list[str]
+    ranker_score: float | None = None
 
 
 class RecommendationService:
@@ -36,21 +38,26 @@ class RecommendationService:
         ).all():
             self.skills_by_job.setdefault(job_id, set()).add(normalized)
         self.embedder = build_embedder(settings.embedding_model)
+        self.retrieval_fallback_used = True
         artifact_dir = Path(settings.retrieval_artifact_dir)
-        self.fallback_used = True
         if (artifact_dir / "metadata.json").exists():
             try:
                 loaded_index = VectorIndex.load(artifact_dir)
                 if loaded_index.embeddings.shape[1] != self.embedder.dimension:
                     raise ValueError(
                         "retrieval artifact dimension does not match the active embedding backend"
-                    )
+                )
                 self.index = loaded_index
-                self.fallback_used = False
+                self.retrieval_fallback_used = False
             except Exception:
                 self.index = self._build_fallback_index()
         else:
             self.index = self._build_fallback_index()
+        self.ranker = RankerProvider(settings)
+        self.model_version = self.ranker.model_version
+        self.model_type = self.ranker.model_type
+        self.artifact_path = self.ranker.artifact_path
+        self.fallback_used = self.retrieval_fallback_used or self.ranker.fallback_used
 
     def _build_fallback_index(self) -> VectorIndex:
         texts = [job_text(job, self.skills_by_job.get(job.id, set())) for job in self.jobs]
@@ -91,19 +98,44 @@ class RecommendationService:
             job = self.jobs_by_id.get(result.item_id)
             if job is None:
                 continue
-            feature_values = feature_store.build(
+            feature_vector = feature_store.build(
                 user_id,
                 job.id,
                 retrieval_score=result.score,
                 retrieval_position=retrieval_position,
-            ).as_dict()
+            )
+            feature_values = feature_vector.as_dict()
             skill_ratio = feature_values["skill_overlap_ratio"]
             role_match = feature_values["candidate_job_title_overlap"]
             compatibility = feature_values["remote_compatible"]
             similarity = max(0.0, min(1.0, (feature_values["retrieval_score"] + 1.0) / 2.0))
             score = max(0.0, min(1.0, 0.65 * similarity + 0.2 * skill_ratio + 0.1 * role_match + 0.05 * compatibility))
             reasons = self._reasons(skill_ratio, role_match, compatibility, similarity)
-            scored.append(ScoredJob(job, score, float(result.score), reasons))
+            scored.append(
+                ScoredJob(
+                    job,
+                    score,
+                    float(result.score),
+                    reasons,
+                    self.ranker.predict(feature_vector) if self.ranker.available else None,
+                )
+            )
+        if self.ranker.available and scored and all(item.ranker_score is not None for item in scored):
+            ranker_scores = [item.ranker_score for item in scored]
+            minimum = min(ranker_scores)
+            maximum = max(ranker_scores)
+            spread = maximum - minimum
+            scored = [
+                replace(
+                    item,
+                    score=0.5 if spread == 0 else (float(item.ranker_score) - minimum) / spread,
+                )
+                for item in scored
+            ]
+        self.model_version = self.ranker.model_version
+        self.model_type = self.ranker.model_type
+        self.artifact_path = self.ranker.artifact_path
+        self.fallback_used = self.retrieval_fallback_used or self.ranker.fallback_used
         scored.sort(
             key=lambda item: (
                 -item.score,

@@ -15,6 +15,7 @@ dependencies = [
   "sqlalchemy>=2.0,<3",
   "psycopg[binary]>=3.2,<4",
   "numpy>=1.26,<3",
+  "lightgbm>=4.5,<5",
 ]
 
 [project.optional-dependencies]
@@ -45,6 +46,7 @@ packages = [
   "ml",
   "ml.evaluation",
   "ml.features",
+  "ml.ranking",
   "ml.retrieval",
 ]
 

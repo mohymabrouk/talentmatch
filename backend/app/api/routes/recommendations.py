@@ -29,18 +29,19 @@ def get_recommendations(
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     latency_ms = round((perf_counter() - started) * 1000)
     settings = request.app.state.settings
-    model = db.query(ModelVersion).filter(ModelVersion.version == settings.model_version).one_or_none()
+    model = db.query(ModelVersion).filter(ModelVersion.version == service.model_version).one_or_none()
     if model is None:
         model = ModelVersion(
-            model_type="content-retrieval",
-            version=settings.model_version,
+            model_type=service.model_type,
+            version=service.model_version,
             status="active",
-            artifact_path=settings.retrieval_artifact_dir,
+            artifact_path=service.artifact_path,
+            metrics_json=service.ranker.metrics_json,
         )
         db.add(model)
     recommendation_request = RecommendationRequest(
         user_id=user_id,
-        model_version=settings.model_version,
+        model_version=service.model_version,
         retrieval_version=settings.retrieval_version,
         candidate_count=candidate_count,
         returned_count=len(scored),
@@ -65,13 +66,13 @@ def get_recommendations(
                 job_id=item.job.id,
                 event_type="impression",
                 recommendation_request_id=recommendation_request.id,
-                model_version=settings.model_version,
+                model_version=service.model_version,
             )
         )
     db.commit()
     return RecommendationResponse(
         recommendation_request_id=recommendation_request.id,
-        model_version=settings.model_version,
+        model_version=service.model_version,
         retrieval_version=settings.retrieval_version,
         feature_schema_version=FEATURE_SCHEMA_VERSION,
         items=[

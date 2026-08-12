@@ -13,6 +13,8 @@ class Settings(BaseSettings):
     retrieval_version: str = "retrieval-v001"
     model_version: str = "content-v001"
     retrieval_artifact_dir: str = "ml/artifacts/retrieval/v001"
+    ranker_version: str = "ranker-v001"
+    ranker_artifact_dir: str = "ml/artifacts/ranker/v001"
     embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"
     max_recommendation_limit: int = 20
 

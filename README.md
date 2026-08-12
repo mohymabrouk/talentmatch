@@ -16,7 +16,7 @@ Build a two-stage recommendation system that matches candidates to jobs using:
 
 The project is designed to demonstrate practical ML engineering rather than notebook-only modeling.
 
-## Implemented through Phase 3
+## Implemented through Phase 4
 
 The current implementation includes:
 
@@ -31,6 +31,10 @@ The current implementation includes:
 - Retrieval evaluation for Recall@20, NDCG@20, and MRR
 - Versioned `features-v001` user, job, cross, retrieval, freshness, and behavior features
 - Point-in-time feature snapshots shared by recommendation serving and training-row export
+- Deterministic labeled feedback seeder and chronological grouped train/validation/test split
+- LightGBM LambdaRank training with retrieval, skill, popularity, and freshness baselines
+- Versioned ranker artifacts containing the model, feature schema, metrics, config, and metadata
+- Ranker inference with schema validation, model-version persistence, and content-score fallback
 
 The demo identity is intentionally local-only. Authentication and authorization via an external provider remain future work.
 
@@ -65,6 +69,18 @@ After recommendation traffic exists, export time-safe training rows with:
 ```bash
 .venv/bin/python scripts/build_features.py
 ```
+
+For a deterministic local training run after `seed_jobs.py`, use:
+
+```bash
+.venv/bin/python scripts/seed_demo_feedback.py
+.venv/bin/python scripts/build_features.py
+.venv/bin/python scripts/train_ranker.py
+```
+
+The default artifact directory is `ml/artifacts/ranker/v001/` and is intentionally
+ignored by Git. The API loads it when all compatibility files are present; otherwise
+it serves the Phase 3 content score and records `fallback_used=true`.
 
 Validation commands:
 
