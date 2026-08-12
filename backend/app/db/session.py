@@ -3,7 +3,7 @@ from collections.abc import Generator
 from sqlalchemy import Engine, create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
-from app.config import Settings
+from app.core.config import Settings
 from app.db.migrations import run_migrations
 
 
@@ -24,4 +24,3 @@ def session_scope(factory: sessionmaker[Session]) -> Generator[Session, None, No
         yield session
     finally:
         session.close()
-

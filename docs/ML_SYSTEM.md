@@ -233,6 +233,31 @@ candidate_job_seniority_match
 
 ---
 
+# Implemented Phase 3 feature pipeline
+
+The canonical feature schema is `features-v001` in `ml/features/schema.py`.
+`FeatureBuilder` owns the calculations, while `FeatureStore` supplies candidate
+and job snapshots at an explicit `as_of` timestamp. The recommendation service
+and `scripts/build_features.py` use the same builder and schema ordering.
+
+Feature snapshots exclude interactions after `as_of`. Training rows are built
+from served recommendation items and use the request creation time as the
+feature cutoff; later saves and applications are labels, not input features.
+
+The exported record contains:
+
+```text
+schema_version
+request_id
+user_id
+job_id
+served_at
+label
+features
+```
+
+---
+
 # Labels
 
 Preferred positive hierarchy:

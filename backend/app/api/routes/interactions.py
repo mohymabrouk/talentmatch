@@ -3,7 +3,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_db, get_user_id
-from app.db.models import Interaction, Job, RecommendationItem, RecommendationRequest
+from app.models import Interaction, Job, RecommendationItem, RecommendationRequest
 from app.schemas.interactions import InteractionCreate, InteractionResponse
 
 router = APIRouter(tags=["interactions"])
@@ -50,4 +50,3 @@ def create_interaction(
         recommendation_request_id=interaction.recommendation_request_id,
         model_version=interaction.model_version,
     )
-

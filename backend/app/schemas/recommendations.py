@@ -16,5 +16,5 @@ class RecommendationResponse(BaseModel):
     recommendation_request_id: str
     model_version: str
     retrieval_version: str
+    feature_schema_version: str
     items: list[RecommendationItemResponse]
-

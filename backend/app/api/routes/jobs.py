@@ -5,7 +5,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
-from app.db.models import Job
+from app.models import Job
 from app.schemas.api import JobListResponse, JobResponse
 
 router = APIRouter(tags=["jobs"])
@@ -49,4 +49,3 @@ def get_job(job_id: str, db: Session = Depends(get_db)) -> Job:
     if job is None:
         raise HTTPException(status_code=404, detail="Job not found")
     return job
-

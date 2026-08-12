@@ -1,6 +1,6 @@
 # Implementation Checklist
 
-## Completed through Phase 2
+## Completed through Phase 3
 
 - [x] Create monorepo
 - [x] Add frontend
@@ -41,6 +41,14 @@
 - [x] Request validation
 - [x] Recommendation request IDs
 - [x] Recommendation item positions
+- [x] Versioned feature schema
+- [x] User feature definitions
+- [x] Job feature definitions
+- [x] Cross feature definitions
+- [x] Time-safe point-in-time snapshots
+- [x] Shared training/serving feature builder
+- [x] Feature dataset exporter
+- [x] Critical feature unit tests
 
 The unchecked items below belong to later roadmap phases or production authentication/deployment work.
 

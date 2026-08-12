@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes import health, interactions, jobs, profile, recommendations
-from app.config import Settings, get_settings
+from app.core.config import Settings, get_settings
 from app.db.session import build_session_factory
 
 

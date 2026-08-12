@@ -3,8 +3,8 @@ from pathlib import Path
 from fastapi.testclient import TestClient
 from sqlalchemy import func, select
 
-from app.config import Settings
-from app.db.models import Interaction, RecommendationItem
+from app.core.config import Settings
+from app.models import Interaction, RecommendationItem
 from app.main import create_app
 
 from scripts.seed_jobs import seed
@@ -63,4 +63,3 @@ def test_unknown_request_is_rejected(tmp_path: Path):
         json={"job_id": job_id, "event_type": "click", "recommendation_request_id": "00000000-0000-0000-0000-000000000099"},
     )
     assert response.status_code == 404
-

@@ -4,10 +4,11 @@ from pathlib import Path
 from fastapi.testclient import TestClient
 from sqlalchemy import select
 
-from app.config import Settings
-from app.db.models import RecommendationItem, RecommendationRequest
+from app.core.config import Settings
+from app.models import RecommendationItem, RecommendationRequest
 from app.main import create_app
 from ml.evaluation.metrics import mrr, ndcg_at_k, recall_at_k
+from ml.features.schema import FEATURE_SCHEMA_VERSION
 from ml.retrieval.embeddings import HashingEmbedder
 from ml.retrieval.index import VectorIndex
 from ml.retrieval.text import job_text
@@ -61,6 +62,7 @@ def test_recommendations_persist_request_and_positions(tmp_path: Path):
     assert response.status_code == 200, response.text
     data = response.json()
     assert data["recommendation_request_id"]
+    assert data["feature_schema_version"] == FEATURE_SCHEMA_VERSION
     assert 1 <= len(data["items"]) <= 20
     assert data["items"][0]["match_reasons"]
     session = app.state.session_factory()

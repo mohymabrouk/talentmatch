@@ -16,7 +16,7 @@ Build a two-stage recommendation system that matches candidates to jobs using:
 
 The project is designed to demonstrate practical ML engineering rather than notebook-only modeling.
 
-## Implemented through Phase 2
+## Implemented through Phase 3
 
 The current implementation includes:
 
@@ -29,6 +29,8 @@ The current implementation includes:
 - Top-20 content recommendations, match reasons, request IDs, served positions, and automatic impressions
 - Minimal Next.js frontend with profile setup and save/dismiss/apply/click feedback controls
 - Retrieval evaluation for Recall@20, NDCG@20, and MRR
+- Versioned `features-v001` user, job, cross, retrieval, freshness, and behavior features
+- Point-in-time feature snapshots shared by recommendation serving and training-row export
 
 The demo identity is intentionally local-only. Authentication and authorization via an external provider remain future work.
 
@@ -58,12 +60,18 @@ npm run dev
 
 The frontend uses `http://localhost:8000` by default. Set `NEXT_PUBLIC_API_URL` when the API is hosted elsewhere.
 
+After recommendation traffic exists, export time-safe training rows with:
+
+```bash
+.venv/bin/python scripts/build_features.py
+```
+
 Validation commands:
 
 ```bash
 .venv/bin/pytest -q
 cd frontend && npm run build
-.venv/bin/python scripts/evaluate_retrieval.py
+.venv/bin/python scripts/evaluate.py
 ```
 
 ---

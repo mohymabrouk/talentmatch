@@ -5,9 +5,10 @@ from sqlalchemy.orm import Session
 
 from app.api.deps import get_db, get_user_id
 from app.api.routes.profile import ensure_user
-from app.db.models import Interaction, ModelVersion, RecommendationItem, RecommendationRequest
+from app.models import Interaction, ModelVersion, RecommendationItem, RecommendationRequest
 from app.schemas.recommendations import RecommendationItemResponse, RecommendationResponse
 from app.services.recommendations import RecommendationService
+from ml.features.schema import FEATURE_SCHEMA_VERSION
 
 router = APIRouter(tags=["recommendations"])
 
@@ -72,6 +73,7 @@ def get_recommendations(
         recommendation_request_id=recommendation_request.id,
         model_version=settings.model_version,
         retrieval_version=settings.retrieval_version,
+        feature_schema_version=FEATURE_SCHEMA_VERSION,
         items=[
             RecommendationItemResponse(
                 position=position,

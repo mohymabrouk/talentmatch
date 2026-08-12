@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import UTC, datetime
 from pathlib import Path
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.db.models import CandidateProfile, CandidateSkill, CandidateTargetRole, Job, JobSkill, Skill
+from app.models import CandidateProfile, CandidateSkill, CandidateTargetRole, Job, JobSkill, Skill
+from ml.features.store import FeatureStore
 from ml.retrieval.embeddings import build_embedder
 from ml.retrieval.index import VectorIndex
 from ml.retrieval.text import candidate_text, job_text
@@ -83,20 +85,22 @@ class RecommendationService:
         query = self.embedder.encode([profile_text])[0]
         retrieval = self.index.search(query, min(200, len(self.jobs)))
         candidate_count = len(retrieval)
-        candidate_skills = set(skills)
+        feature_store = FeatureStore(self.db, datetime.now(UTC).replace(tzinfo=None))
         scored: list[ScoredJob] = []
-        for result in retrieval:
+        for retrieval_position, result in enumerate(retrieval, start=1):
             job = self.jobs_by_id.get(result.item_id)
             if job is None:
                 continue
-            job_skills = self.skills_by_job.get(job.id, set())
-            skill_ratio = len(candidate_skills & job_skills) / len(job_skills) if job_skills else 0.0
-            role_match = max(
-                (self._role_match(role, job.title) for role in roles),
-                default=0.0,
-            )
-            compatibility = self._compatibility(profile, job)
-            similarity = max(0.0, min(1.0, (result.score + 1.0) / 2.0))
+            feature_values = feature_store.build(
+                user_id,
+                job.id,
+                retrieval_score=result.score,
+                retrieval_position=retrieval_position,
+            ).as_dict()
+            skill_ratio = feature_values["skill_overlap_ratio"]
+            role_match = feature_values["candidate_job_title_overlap"]
+            compatibility = feature_values["remote_compatible"]
+            similarity = max(0.0, min(1.0, (feature_values["retrieval_score"] + 1.0) / 2.0))
             score = max(0.0, min(1.0, 0.65 * similarity + 0.2 * skill_ratio + 0.1 * role_match + 0.05 * compatibility))
             reasons = self._reasons(skill_ratio, role_match, compatibility, similarity)
             scored.append(ScoredJob(job, score, float(result.score), reasons))
