@@ -9,8 +9,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "backend"))
 
 from sqlalchemy import select  # noqa: E402
 
-from app.config import Settings  # noqa: E402
-from app.db.models import Job, JobSkill, Skill, User  # noqa: E402
+from app.core.config import Settings  # noqa: E402
+from app.models import Job, JobSkill, Skill, User  # noqa: E402
 from app.db.session import build_session_factory  # noqa: E402
 from app.api.routes.profile import ensure_user  # noqa: E402
 
@@ -85,4 +85,3 @@ if __name__ == "__main__":
     settings = Settings()
     dataset = Path(os.getenv("JOB_DATASET", Path(__file__).resolve().parents[1] / "data" / "jobs.jsonl"))
     print(f"Seeded {seed(dataset, settings)} jobs")
-

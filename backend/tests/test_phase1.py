@@ -4,8 +4,8 @@ from pathlib import Path
 from fastapi.testclient import TestClient
 from sqlalchemy import select
 
-from app.config import Settings
-from app.db.models import RecommendationItem, RecommendationRequest
+from app.core.config import Settings
+from app.models import RecommendationItem, RecommendationRequest
 from app.main import create_app
 from ml.evaluation.metrics import mrr, ndcg_at_k, recall_at_k
 from ml.retrieval.embeddings import HashingEmbedder

@@ -6,10 +6,10 @@ __pycache__/
 .venv/
 venv/
 *.egg-info/
+build/
 talentmatch.db
 .env
 frontend/node_modules/
 frontend/.next/
 ml/artifacts/*
 !ml/artifacts/.gitkeep
-

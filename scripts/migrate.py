@@ -6,7 +6,7 @@ from sqlalchemy import create_engine
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "backend"))
 
-from app.config import Settings  # noqa: E402
+from app.core.config import Settings  # noqa: E402
 from app.db.migrations import run_migrations  # noqa: E402
 
 
@@ -18,4 +18,3 @@ if __name__ == "__main__":
     )
     run_migrations(engine)
     print(f"Applied migrations for {settings.database_url}")
-

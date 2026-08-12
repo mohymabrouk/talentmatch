@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.api.deps import get_db, get_user_id
 from app.api.routes.profile import ensure_user
-from app.db.models import Interaction, ModelVersion, RecommendationItem, RecommendationRequest
+from app.models import Interaction, ModelVersion, RecommendationItem, RecommendationRequest
 from app.schemas.recommendations import RecommendationItemResponse, RecommendationResponse
 from app.services.recommendations import RecommendationService
 

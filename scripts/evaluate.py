@@ -9,8 +9,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 from sqlalchemy import select  # noqa: E402
 
-from app.config import Settings  # noqa: E402
-from app.db.models import Job, JobSkill, Skill  # noqa: E402
+from app.core.config import Settings  # noqa: E402
+from app.models import Job, JobSkill, Skill  # noqa: E402
 from app.db.session import build_session_factory  # noqa: E402
 from ml.evaluation.metrics import mrr, ndcg_at_k, recall_at_k  # noqa: E402
 from ml.retrieval.embeddings import build_embedder  # noqa: E402
@@ -46,4 +46,3 @@ if __name__ == "__main__":
         print(json.dumps({"cases": len(records), **result}, indent=2))
     finally:
         db.close()
-

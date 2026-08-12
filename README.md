@@ -63,7 +63,7 @@ Validation commands:
 ```bash
 .venv/bin/pytest -q
 cd frontend && npm run build
-.venv/bin/python scripts/evaluate_retrieval.py
+.venv/bin/python scripts/evaluate.py
 ```
 
 ---

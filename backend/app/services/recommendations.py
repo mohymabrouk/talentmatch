@@ -6,7 +6,7 @@ from pathlib import Path
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.db.models import CandidateProfile, CandidateSkill, CandidateTargetRole, Job, JobSkill, Skill
+from app.models import CandidateProfile, CandidateSkill, CandidateTargetRole, Job, JobSkill, Skill
 from ml.retrieval.embeddings import build_embedder
 from ml.retrieval.index import VectorIndex
 from ml.retrieval.text import candidate_text, job_text

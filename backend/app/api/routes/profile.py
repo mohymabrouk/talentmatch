@@ -3,8 +3,8 @@ from sqlalchemy import delete, select
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_db, get_user_id
-from app.config import get_settings
-from app.db.models import CandidateProfile, CandidateSkill, CandidateTargetRole, Skill, User
+from app.core.config import get_settings
+from app.models import CandidateProfile, CandidateSkill, CandidateTargetRole, Skill, User
 from app.schemas.api import ProfilePatch, ProfileResponse
 
 router = APIRouter(tags=["profile"])
@@ -97,4 +97,3 @@ def update_profile(
             db.add(CandidateSkill(user_id=user_id, skill_id=skill.id))
     db.commit()
     return profile_response(db, user_id)
-

@@ -100,7 +100,7 @@ class VectorIndex:
 def build_job_index(db, settings, output_dir: Path, prefer_sentence_transformer: bool = True) -> dict[str, object]:
     from sqlalchemy import select
 
-    from app.db.models import Job, JobSkill, Skill
+    from app.models import Job, JobSkill, Skill
 
     jobs = db.scalars(select(Job).where(Job.is_active.is_(True)).order_by(Job.id)).all()
     skill_rows = db.execute(
@@ -119,4 +119,3 @@ def build_job_index(db, settings, output_dir: Path, prefer_sentence_transformer:
         metadata={"embedding_model": embedder.name, "retrieval_version": settings.retrieval_version},
     )
     return {"count": len(jobs), "dimension": int(embeddings.shape[1]), "backend": index.backend, "model": embedder.name}
-
