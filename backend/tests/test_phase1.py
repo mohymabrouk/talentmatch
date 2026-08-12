@@ -51,6 +51,7 @@ def test_job_text_is_stable_for_unordered_skills():
 def test_recommendations_persist_request_and_positions(tmp_path: Path):
     app = build_seeded_app(tmp_path)
     client = TestClient(app)
+    assert client.get("/api/v1/recommendations").status_code == 400
     profile = client.patch(
         "/api/v1/profile",
         json={"target_roles": ["Machine Learning Engineer"], "skills": ["Python", "PyTorch"], "remote_preference": "hybrid"},

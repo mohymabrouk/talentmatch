@@ -71,8 +71,8 @@ class RecommendationService:
                 .where(CandidateSkill.user_id == user_id)
             ).all()
         )
-        if not profile and not roles and not skills:
-            raise ValueError("Complete your profile before requesting recommendations.")
+        if not roles and not skills:
+            raise ValueError("Add at least one target role or skill before requesting recommendations.")
         profile_text = candidate_text(
             roles,
             skills,
