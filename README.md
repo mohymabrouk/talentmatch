@@ -16,6 +16,56 @@ Build a two-stage recommendation system that matches candidates to jobs using:
 
 The project is designed to demonstrate practical ML engineering rather than notebook-only modeling.
 
+## Implemented through Phase 2
+
+The current implementation includes:
+
+- PostgreSQL-compatible SQL migrations with SQLite support for fast local tests
+- 12-job deterministic demo dataset and idempotent seed script
+- Candidate profile, skills, jobs, recommendation requests/items, model versions, and append-only interactions
+- FastAPI health, readiness, profile, jobs, recommendations, and interaction endpoints
+- Local hashing embeddings with an optional locally cached sentence-transformer backend
+- FAISS index artifacts when `faiss-cpu` is available, with an exact NumPy fallback
+- Top-20 content recommendations, match reasons, request IDs, served positions, and automatic impressions
+- Minimal Next.js frontend with profile setup and save/dismiss/apply/click feedback controls
+- Retrieval evaluation for Recall@20, NDCG@20, and MRR
+
+The demo identity is intentionally local-only. Authentication and authorization via an external provider remain future work.
+
+## Local development
+
+```bash
+python3 -m venv .venv
+.venv/bin/pip install -e '.[test]'
+
+# SQLite is the default and needs no service.
+.venv/bin/python scripts/migrate.py
+.venv/bin/python scripts/seed_jobs.py
+.venv/bin/python scripts/build_index.py
+
+PYTHONPATH=backend .venv/bin/uvicorn app.main:app --reload --port 8000
+```
+
+For PostgreSQL, start `docker compose -f infra/docker-compose.yml up -d postgres`, set `DATABASE_URL` to `postgresql+psycopg://talentmatch:talentmatch@localhost:5432/talentmatch`, then run the same migration and seed commands.
+
+In another terminal:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+The frontend uses `http://localhost:8000` by default. Set `NEXT_PUBLIC_API_URL` when the API is hosted elsewhere.
+
+Validation commands:
+
+```bash
+.venv/bin/pytest -q
+cd frontend && npm run build
+.venv/bin/python scripts/evaluate_retrieval.py
+```
+
 ---
 
 ## Core user flow

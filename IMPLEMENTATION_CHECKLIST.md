@@ -1,5 +1,49 @@
 # Implementation Checklist
 
+## Completed through Phase 2
+
+- [x] Create monorepo
+- [x] Add frontend
+- [x] Add backend
+- [x] Add ML package
+- [x] Add docs
+- [x] Add Docker
+- [x] Create users table
+- [x] Create candidate profiles
+- [x] Create skills
+- [x] Create candidate skills
+- [x] Create candidate target roles
+- [x] Create jobs
+- [x] Create job skills
+- [x] Create interactions
+- [x] Create recommendation requests
+- [x] Create recommendation items
+- [x] Create model versions
+- [x] Add indexes
+- [x] Add migrations
+- [x] Seed deterministic demo jobs
+- [x] Normalize seeded skill values
+- [x] Select local embedding fallback
+- [x] Build index and ID mapping
+- [x] Normalize vectors
+- [x] Encode candidate profile
+- [x] Search top 200 candidates
+- [x] Add retrieval fallback
+- [x] Evaluate Recall@20
+- [x] Health endpoint
+- [x] Readiness endpoint
+- [x] Profile GET
+- [x] Profile PATCH
+- [x] Jobs list
+- [x] Job detail
+- [x] Recommendations endpoint
+- [x] Interaction endpoint
+- [x] Request validation
+- [x] Recommendation request IDs
+- [x] Recommendation item positions
+
+The unchecked items below belong to later roadmap phases or production authentication/deployment work.
+
 ## Repository
 
 - [ ] Create monorepo
