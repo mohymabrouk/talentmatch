@@ -48,6 +48,22 @@ danger          #F97066
 
 Accent color should be used sparingly or not at all.
 
+## Implemented Phase 6 workspace
+
+The current frontend uses a warm paper background with restrained green/coral
+accents, a responsive navigation bar, three-column desktop recommendation cards,
+and a single-column mobile layout. It includes:
+
+- profile setup and editing for roles, skills, location, experience, and work mode
+- discovery search and work-mode filtering
+- match score/reason cards with save and dismiss actions
+- accessible job detail drawer with application tracking and original-job link
+- saved jobs and applications views backed by the API
+- loading skeletons, empty results, inline errors, and keyboard-visible focus
+
+The API is still intentionally demo-authenticated through `X-Demo-User-ID` until
+the authentication phase is implemented.
+
 ---
 
 ## Typography
