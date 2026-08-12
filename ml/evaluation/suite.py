@@ -16,6 +16,18 @@ class JobMetadata:
     company_name: str
 
 
+def ranked_list_metrics(
+    recommended: list[str], relevant: set[str], ks: tuple[int, ...] = (5, 10, 20)
+) -> dict[str, float]:
+    labels = [int(item in relevant) for item in recommended]
+    scores = [float(len(recommended) - index) for index in range(len(recommended))]
+    return {
+        **{f"recall@{k}": _recall(labels, scores, k) for k in ks},
+        **{f"ndcg@{k}": _ndcg(labels, scores, k) for k in ks},
+        "mrr": _mrr(labels, scores),
+    }
+
+
 def _group_rows(rows: list[RankingRow] | tuple[RankingRow, ...], scores: list[float]) -> list[list[tuple[RankingRow, float]]]:
     grouped: dict[str, list[tuple[RankingRow, float]]] = defaultdict(list)
     for row, score in zip(rows, scores, strict=True):
@@ -138,9 +150,10 @@ def segment_metrics(
     for name, indices in segments.items():
         segment_rows = [rows[index] for index in indices]
         segment_scores = [scores[index] for index in indices]
-        if not segment_rows:
-            continue
         result[name] = {"rows": float(len(segment_rows)), "groups": float(len({row.request_id for row in segment_rows}))}
+        if not segment_rows:
+            result[name].update(ranking_metrics(segment_rows, segment_scores, ks))
+            continue
         result[name].update(ranking_metrics(segment_rows, segment_scores, ks))
     return result
 
@@ -171,7 +184,9 @@ def evaluate_ranker(
         "latency": {
             "prediction_total_ms": round(elapsed_ms, 6),
             "prediction_per_row_ms": round(elapsed_ms / len(rows), 6),
+            "prediction_p50_ms": round(latency_values[min(len(latency_values) - 1, len(latency_values) // 2)], 6),
             "prediction_p95_ms": round(latency_values[p95_index], 6),
+            "prediction_p99_ms": round(latency_values[-1], 6),
         },
         "segments": segment_metrics(rows, scores, ks),
     }

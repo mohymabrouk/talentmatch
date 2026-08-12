@@ -20,7 +20,7 @@ from sqlalchemy import select  # noqa: E402
 from app.core.config import Settings  # noqa: E402
 from app.db.session import build_session_factory  # noqa: E402
 from app.models import Job  # noqa: E402
-from ml.evaluation.suite import JobMetadata, evaluate_ranker, ranking_metrics  # noqa: E402
+from ml.evaluation.suite import JobMetadata, evaluate_ranker, ranked_list_metrics  # noqa: E402
 from ml.features.dataset import FeatureDatasetBuilder  # noqa: E402
 from ml.ranking.dataset import chronological_split, load_rows  # noqa: E402
 from ml.ranking.model import RankerModel  # noqa: E402
@@ -79,14 +79,7 @@ def evaluate_retrieval(
         results = index.search(vector, min(200, len(jobs)))
         latency_values.append((perf_counter() - started) * 1000)
         recommended = [item.item_id for item in results]
-        case_metrics = ranking_metrics(
-            [
-                type("EvaluationRow", (), {"request_id": "case", "job_id": job_id, "label": int(job_id in relevant), "features": type("Features", (), {"names": (), "values": ()})()})()
-                for job_id in recommended
-            ],
-            [float(len(recommended) - index) for index in range(len(recommended))],
-            KS,
-        )
+        case_metrics = ranked_list_metrics(recommended, set(relevant), KS)
         for name, value in case_metrics.items():
             metric_values[name].append(value)
         segment = f"remote_preference:{record.get('remote_preference') or 'unknown'}"
