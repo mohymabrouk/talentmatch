@@ -20,6 +20,7 @@ def candidate_text(
 
 
 def job_text(job, skills: Iterable[str]) -> str:
+    ordered_skills = sorted(set(skills), key=str.casefold)
     return "\n".join(
         [
             f"Title: {job.title}",
@@ -27,8 +28,7 @@ def job_text(job, skills: Iterable[str]) -> str:
             f"Location: {job.location or 'not specified'}",
             f"Work mode: {job.remote_mode or 'not specified'}",
             f"Seniority: {job.seniority or 'not specified'}",
-            f"Skills: {', '.join(skills)}",
+            f"Skills: {', '.join(ordered_skills)}",
             f"Description: {job.description}",
         ]
     )
-

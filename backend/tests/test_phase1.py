@@ -10,6 +10,7 @@ from app.main import create_app
 from ml.evaluation.metrics import mrr, ndcg_at_k, recall_at_k
 from ml.retrieval.embeddings import HashingEmbedder
 from ml.retrieval.index import VectorIndex
+from ml.retrieval.text import job_text
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
 from seed_jobs import seed  # noqa: E402
@@ -33,6 +34,18 @@ def test_index_round_trip_and_metrics(tmp_path: Path):
     assert recall_at_k(["a", "b"], ["b"], 2) == 1.0
     assert ndcg_at_k(["b", "a"], ["b"], 2) == 1.0
     assert mrr(["a", "b"], ["b"]) == 0.5
+
+
+def test_job_text_is_stable_for_unordered_skills():
+    class JobFixture:
+        title = "Python Engineer"
+        company_name = "Acme"
+        location = "Paris"
+        remote_mode = "hybrid"
+        seniority = "mid"
+        description = "Build services"
+
+    assert job_text(JobFixture(), {"SQL", "Python"}) == job_text(JobFixture(), {"Python", "SQL"})
 
 
 def test_recommendations_persist_request_and_positions(tmp_path: Path):
