@@ -37,6 +37,7 @@ class RankingRow:
             user_id=str(record["user_id"]),
             job_id=str(record["job_id"]),
             served_at=served_at,
+            label=label,
             features=vector,
         )
 
